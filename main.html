@@ -8,6 +8,32 @@
 
 <body>
 	<!-- the entire body must be written by student -->
+	 <div class="app">
+    <h1>Meditation Timer</h1>
+    <div class="timer-container">
+      <svg class="progress-ring" width="200" height="200">
+        <circle class="ring-bg" cx="100" cy="100" r="90" />
+        <circle class="ring-progress" cx="100" cy="100" r="90" />
+      </svg>
+      <div class="time-display" id="timeDisplay">10:00</div>
+    </div>
+
+    <div class="controls">
+      <div class="duration-buttons">
+        <button onclick="setDuration(2)">2 Minutes</button>
+        <button onclick="setDuration(5)">5 Minutes</button>
+        <button onclick="setDuration(10)">10 Minutes</button>
+      </div>
+      <div class="sound-buttons">
+        <button onclick="setSound('rain')">🌧️</button>
+        <button onclick="setSound('sun')">🌞</button>
+      </div>
+    </div>
+  </div>
+
+  <audio id="rainSound" src="rain.mp3" loop></audio>
+  <audio id="sunSound" src="nature.mp3" loop></audio>
+
     <script type="text/javascript" src="./script.js">
 </script>
 

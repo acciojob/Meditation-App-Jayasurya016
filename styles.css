@@ -1,1 +1,70 @@
 /*  your css code here. If applicable */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: url('water-background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: white;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+}
+
+.app {
+  max-width: 400px;
+  margin: auto;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.timer-container {
+  position: relative;
+  margin: 20px auto;
+}
+
+.progress-ring {
+  transform: rotate(-90deg);
+}
+
+.ring-bg {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 10;
+}
+
+.ring-progress {
+  fill: none;
+  stroke: #00bfff;
+  stroke-width: 10;
+  stroke-dasharray: 565.48;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.time-display {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2em;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 15px;
+  font-size: 1em;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #0077b6;
+  color: white;
+}
+
+button:hover {
+  background-color: #023e8a;
+}
