@@ -1,94 +1,84 @@
- document.addEventListener('DOMContentLoaded', () => {
-            // Select all necessary DOM elements
-            const video = document.querySelector(".vid-container video");
-            const song = document.querySelector(".song");
-            const playBtn = document.querySelector(".play");
-            const timeDisplay = document.querySelector(".time-display");
-            const timeButtons = document.querySelectorAll("#time-select button");
-            const soundButtons = document.querySelectorAll(".sound-picker button");
+const app = () => {
+    const song = document.querySelector('.song');
+    const play = document.querySelector('.play');
+    const outline = document.querySelector('.moving-outline circle');
+    const video = document.querySelector('.vid-container video');
 
-            let fakeDuration = 600; // Default meditation time in seconds (10 mins)
-            let timerInterval = null;
+    // Sounds
+    const sounds = document.querySelectorAll('.sound-picker button');
+    
+    // Time Display
+    const timeDisplay = document.querySelector('.time-display');
+    const timeSelect = document.querySelectorAll('.time-select button');
 
-            // Function to update the time display
-            const updateTimeDisplay = (seconds) => {
-                const mins = Math.floor(seconds / 60);
-                const secs = seconds % 60;
-                timeDisplay.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-            };
+    // Get the length of the outline
+    const outlineLength = outline.getTotalLength();
+    
+    // Duration
+    let fakeDuration = 600;
 
-            // Function to toggle play/pause
-            const togglePlay = () => {
-                if (song.paused) {
-                    song.play();
-                    video.play();
-                    startTimer();
-                    playBtn.textContent = "⏸️";
-                } else {
-                    song.pause();
-                    video.pause();
-                    clearInterval(timerInterval);
-                    playBtn.textContent = "▶️";
-                }
-            };
+    outline.style.strokeDashoffset = outlineLength;
+    outline.style.strokeDasharray = outlineLength;
 
-            // Function to start the countdown timer
-            const startTimer = () => {
-                let remaining = fakeDuration;
-                clearInterval(timerInterval);
-
-                timerInterval = setInterval(() => {
-                    remaining--;
-                    updateTimeDisplay(remaining);
-                    if (remaining < 0) {
-                        song.pause();
-                        video.pause();
-                        playBtn.textContent = "▶️";
-                        clearInterval(timerInterval);
-                        song.currentTime = 0;
-                    }
-                }, 1000);
-            };
-
-            // Add event listener to the play/pause button
-            playBtn.addEventListener("click", togglePlay);
-
-            // Add event listeners for time selection buttons
-            timeButtons.forEach((btn) => {
-                btn.addEventListener("click", function () {
-                    fakeDuration = parseInt(this.dataset.time, 10);
-                    updateTimeDisplay(fakeDuration);
-                    if (!song.paused) {
-                        // Reset timer if already playing
-                        song.currentTime = 0;
-                        togglePlay();
-                        togglePlay();
-                    } else {
-                        song.currentTime = 0;
-                    }
-                });
-            });
-
-            // Add event listeners for sound selection buttons
-            soundButtons.forEach((btn) => {
-                btn.addEventListener("click", function () {
-                    const sound = this.dataset.sound;
-                    song.src = `Sounds/${sound}.mp3`;
-                    video.src = `video/${sound}.mp4`;
-                    
-                    // Pause and reset if already playing
-                    if (!song.paused) {
-                        song.pause();
-                        video.pause();
-                        clearInterval(timerInterval);
-                        playBtn.textContent = "▶️";
-                    }
-                    
-                    // Auto-play the new sound/video
-                    song.play();
-                    video.play();
-                    startTimer();
-                    playBtn.textContent = "⏸️";
-                });
-            });
+    // Pick different sounds
+    sounds.forEach(sound => {
+        sound.addEventListener('click', function() {
+            song.src = this.getAttribute('data-sound');
+            video.src = this.getAttribute('data-video');
+            checkPlaying(song);
         });
+    });
+
+    // Play sound
+    const checkPlaying = song => {
+        if (song.paused) {
+            song.play();
+            video.play();
+            play.src = 'svg/pause.svg';
+        } else {
+            song.pause();
+            video.pause();
+            play.src = 'svg/play.svg';
+        }
+    };
+
+    // We can use a button to toggle between play and pause
+    play.addEventListener('click', () => {
+        checkPlaying(song);
+    });
+
+    // Select time
+    timeSelect.forEach(option => {
+        option.addEventListener('click', function() {
+            fakeDuration = this.getAttribute('data-time');
+            timeDisplay.textContent = `${Math.floor(fakeDuration / 60)}:${Math.floor(fakeDuration % 60)}`;
+        });
+    });
+
+    // We can animate the circle
+    song.ontimeupdate = () => {
+        let currentTime = song.currentTime;
+        let elapsed = fakeDuration - currentTime;
+        let seconds = Math.floor(elapsed % 60);
+        let minutes = Math.floor(elapsed / 60);
+
+        // Animate the progress bar
+        let progress = outlineLength - (currentTime / fakeDuration) * outlineLength;
+        outline.style.strokeDashoffset = progress;
+
+        // Animate the text
+        if (seconds < 10) {
+            seconds = `0${seconds}`;
+        }
+        timeDisplay.textContent = `${minutes}:${seconds}`;
+
+        if (currentTime >= fakeDuration) {
+            song.pause();
+            song.currentTime = 0;
+            play.src = 'svg/play.svg';
+            video.pause();
+        }
+    };
+};
+
+app();
