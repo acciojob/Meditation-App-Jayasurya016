@@ -49,3 +49,46 @@
                     }
                 }, 1000);
             };
+
+            // Add event listener to the play/pause button
+            playBtn.addEventListener("click", togglePlay);
+
+            // Add event listeners for time selection buttons
+            timeButtons.forEach((btn) => {
+                btn.addEventListener("click", function () {
+                    fakeDuration = parseInt(this.dataset.time, 10);
+                    updateTimeDisplay(fakeDuration);
+                    if (!song.paused) {
+                        // Reset timer if already playing
+                        song.currentTime = 0;
+                        togglePlay();
+                        togglePlay();
+                    } else {
+                        song.currentTime = 0;
+                    }
+                });
+            });
+
+            // Add event listeners for sound selection buttons
+            soundButtons.forEach((btn) => {
+                btn.addEventListener("click", function () {
+                    const sound = this.dataset.sound;
+                    song.src = `Sounds/${sound}.mp3`;
+                    video.src = `video/${sound}.mp4`;
+                    
+                    // Pause and reset if already playing
+                    if (!song.paused) {
+                        song.pause();
+                        video.pause();
+                        clearInterval(timerInterval);
+                        playBtn.textContent = "▶️";
+                    }
+                    
+                    // Auto-play the new sound/video
+                    song.play();
+                    video.play();
+                    startTimer();
+                    playBtn.textContent = "⏸️";
+                });
+            });
+        });
