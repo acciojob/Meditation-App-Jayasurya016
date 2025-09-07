@@ -51,7 +51,11 @@ const app = () => {
     timeSelect.forEach(option => {
         option.addEventListener('click', function() {
             fakeDuration = this.getAttribute('data-time');
-            timeDisplay.textContent = `${Math.floor(fakeDuration / 60)}:${Math.floor(fakeDuration % 60)}`;
+            // FIX: Ensure minutes and seconds are correctly formatted to match tests
+            const minutes = Math.floor(fakeDuration / 60);
+            const seconds = Math.floor(fakeDuration % 60);
+            timeDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            song.currentTime = 0; // Reset song time when a new duration is selected
         });
     });
 
@@ -67,10 +71,9 @@ const app = () => {
         outline.style.strokeDashoffset = progress;
 
         // Animate the text
-        if (seconds < 10) {
-            seconds = `0${seconds}`;
-        }
-        timeDisplay.textContent = `${minutes}:${seconds}`;
+        // FIX: Ensure seconds are always two digits
+        const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+        timeDisplay.textContent = `${minutes}:${formattedSeconds}`;
 
         if (currentTime >= fakeDuration) {
             song.pause();
