@@ -1,84 +1,51 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const video = document.querySelector(".vid-container video");
-  const song = document.querySelector(".song");
-  const playBtn = document.querySelector(".play");
-  const timeDisplay = document.querySelector(".time-display");
-  const timeButtons = document.querySelectorAll(".time-select button");
-  const soundButtons = document.querySelectorAll(".sound-picker button");
+let audio = new Audio('Sounds/beach.mp3');
+let timer;
+let timeDisplay = document.querySelector('.time-display');
 
-  let fakeDuration = 600; // default 10 min
-  let timerInterval = null;
-
-  // Play & Pause functionality
-  function togglePlay() {
-    if (song.paused) {
-      song.play();
-      video.play();
-      startTimer();
-      playBtn.textContent = "⏸️";
-    } else {
-      song.pause();
-      video.pause();
-      clearInterval(timerInterval);
-      playBtn.textContent = "▶️";
-    }
-  }
-
-  playBtn.addEventListener("click", togglePlay);
-
-  // Time selection
-  timeButtons.forEach((btn) => {
-    btn.addEventListener("click", function () {
-      fakeDuration = this.dataset.time;
-      updateTimeDisplay(fakeDuration);
-      song.currentTime = 0;
-    });
-  });
-
-  // Sound selection
-  soundButtons.forEach((btn) => {
-    btn.addEventListener("click", function () {
-      song.src = `Sounds/${this.dataset.sound}.mp3`;
-      video.src = `video/${this.dataset.sound}.mp4`;
-      
-      // If audio is playing, reset and play the new one
-      if (!song.paused) {
-        song.pause();
-        video.pause();
-        clearInterval(timerInterval);
-        playBtn.textContent = "▶️";
-      }
-      
-      // Auto-play the new sound/video
-      song.play();
-      video.play();
-      startTimer();
-      playBtn.textContent = "⏸️";
-    });
-  });
-
-  // Timer function
-  function startTimer() {
-    let remaining = fakeDuration;
-    clearInterval(timerInterval);
-
-    timerInterval = setInterval(() => {
-      remaining--;
-      updateTimeDisplay(remaining);
-      if (remaining < 0) {
-        song.pause();
-        video.pause();
-        playBtn.textContent = "▶️";
-        clearInterval(timerInterval);
-        song.currentTime = 0;
-      }
-    }, 1000);
-  }
-
-  // Update display
-  function updateTimeDisplay(seconds) {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    timeDisplay.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-  }
+document.getElementById('beach-sound').addEventListener('click', () => {
+    audio.src = 'Sounds/beach.mp3';
+    audio.play();
 });
+
+document.getElementById('rain-sound').addEventListener('click', () => {
+    audio.src = 'Sounds/rain.mp3';
+    audio.play();
+});
+
+document.getElementById('smaller-mins').addEventListener('click', () => {
+    setTimer(2);
+});
+
+document.getElementById('medium-mins').addEventListener('click', () => {
+    setTimer(5);
+});
+
+document.getElementById('long-mins').addEventListener('click', () => {
+    setTimer(10);
+});
+
+document.querySelector('.play').addEventListener('click', () => {
+    if (audio.paused) {
+        audio.play();
+    } else {
+        audio.pause();
+    }
+});
+
+function setTimer(minutes) {
+    clearInterval(timer);
+    let timeLeft = minutes * 60;
+    timeDisplay.textContent = `${minutes}:0`;
+    
+    timer = setInterval(() => {
+        timeLeft--;
+        let mins = Math.floor(timeLeft / 60);
+        let secs = timeLeft % 60;
+        timeDisplay.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            audio.pause();
+        }
+    }, 1000);
+}
