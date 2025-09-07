@@ -7,8 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const soundButtons = document.querySelectorAll(".sound-picker button");
 
   let fakeDuration = 600; // default 10 min
-  let isPlaying = false;
-  let timerInterval;
+  let timerInterval = null;
 
   // Play & Pause functionality
   function togglePlay() {
@@ -26,13 +25,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   playBtn.addEventListener("click", togglePlay);
-  
+
   // Time selection
   timeButtons.forEach((btn) => {
     btn.addEventListener("click", function () {
       fakeDuration = this.dataset.time;
       updateTimeDisplay(fakeDuration);
-      song.currentTime = 0; // Reset audio
+      song.currentTime = 0;
     });
   });
 
@@ -41,10 +40,20 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener("click", function () {
       song.src = `Sounds/${this.dataset.sound}.mp3`;
       video.src = `video/${this.dataset.sound}.mp4`;
-      togglePlay();
+      
+      // If audio is playing, reset and play the new one
       if (!song.paused) {
-        togglePlay(); // This will pause and then play to reset the timer
+        song.pause();
+        video.pause();
+        clearInterval(timerInterval);
+        playBtn.textContent = "▶️";
       }
+      
+      // Auto-play the new sound/video
+      song.play();
+      video.play();
+      startTimer();
+      playBtn.textContent = "⏸️";
     });
   });
 
@@ -56,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     timerInterval = setInterval(() => {
       remaining--;
       updateTimeDisplay(remaining);
-      if (remaining <= 0) {
+      if (remaining < 0) {
         song.pause();
         video.pause();
         playBtn.textContent = "▶️";
