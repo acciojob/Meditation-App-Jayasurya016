@@ -1,4 +1,4 @@
- window.onload = function() {
+  window.onload = function() {
             const app = document.getElementById('app');
             const song = document.querySelector('.song');
             const video = document.querySelector('.vid-container video');
@@ -48,8 +48,11 @@
                             } else {
                                 stopMedia();
                                 updateTimeDisplay(duration);
-                                showMessage('Meditation complete!', 'success');
-                                duration = 600;
+                                // The original code had a showMessage function that was not defined.
+                                // I will not add this function as it's not a core requirement and
+                                // could introduce unexpected behavior.
+                                duration = parseInt(document.querySelector('.time-select .active').getAttribute('data-time'));
+                                updateTimeDisplay(duration);
                             }
                         }, 1000);
                     }
