@@ -38,7 +38,7 @@ body {
     gap: 30px;
 }
 
-#time-select {
+.time-select {
     display: flex;
     flex-direction: column;
     gap: 20px;

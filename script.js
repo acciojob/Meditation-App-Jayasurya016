@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let countdownInterval;
 
     // Set initial timer display
-    timeDisplay.textContent = '10:00';
+    updateTimeDisplay(duration);
 
     // Play/Pause functionality
     playButton.addEventListener('click', () => {
@@ -43,15 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Time selection
     timeButtons.forEach(button => {
         button.addEventListener('click', () => {
-            // Remove 'active' class from all buttons and add to the clicked one
             timeButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
-
-            // Set duration and update display
             duration = parseInt(button.dataset.time, 10);
             updateTimeDisplay(duration);
-
-            // If already playing, reset and start with new duration
             if (isPlaying) {
                 pauseMedia();
                 playMedia();
@@ -62,17 +57,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Sound and video switching
     soundButtons.forEach(button => {
         button.addEventListener('click', () => {
-            // Remove 'active' class from all sound buttons and add to the clicked one
             soundButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
-
-            // Update video and sound source
             video.src = button.dataset.video;
             soundtrack.src = button.dataset.sound;
-
-            // If playing, restart media with new sources
             if (isPlaying) {
-                pauseMedia();
+                // To properly switch sources, we need to load them first
+                video.load();
+                soundtrack.load();
+                // Then, restart playback
                 playMedia();
             }
         });
@@ -87,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (timeLeft <= 0) {
                 stopTimer();
                 pauseMedia();
-                // Optionally reset the timer to the selected duration
+                // Reset the timer display to the selected duration
                 updateTimeDisplay(duration);
             }
         }, 1000);
