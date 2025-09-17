@@ -1,64 +1,128 @@
-/* Minimal styling so Cypress can find elements and UI looks reasonable */
 body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #0f1720;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #333;
+    color: white;
 }
 
-.app {
-  width: 920px;
-  max-width: 95%;
-  text-align: center;
-  position: relative;
+#app {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
 }
 
-/* Video should cover background */
+.vid-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
 .vid-container video {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-/* Player box */
 .player-container {
-  background: rgba(0,0,0,0.55);
-  padding: 18px;
-  border-radius: 10px;
-  display: inline-block;
-  min-width: 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
 }
 
-/* Timer */
-.time-display {
-  font-size: 28px;
-  margin: 8px 0 16px;
+#time-select {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-/* Buttons */
+.time-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s, border-color 0.3s;
+}
+
+.time-btn.active,
+.time-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+    border-color: white;
+}
+
 .play {
-  font-size: 18px;
-  padding: 8px 14px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  margin-bottom: 12px;
+    position: relative;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    border: 5px solid rgba(255, 255, 255, 0.5);
+    cursor: pointer;
 }
 
-.time-select button,
+.play-btn {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.play-btn img {
+    width: 60px;
+    height: 60px;
+    filter: invert(100%);
+}
+
+.time-display {
+    font-size: 2.5rem;
+    margin: 10px 0 0;
+}
+
+.sound-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .sound-picker button {
-  margin: 6px;
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  background: #007bff;
-  color: #fff;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.3s, border-color 0.3s;
+}
+
+.sound-picker button.active,
+.sound-picker button:hover {
+    background: rgba(255, 255, 255, 0.4);
+    border-color: white;
+}
+
+.sound-picker img {
+    width: 40px;
+    height: 40px;
+    filter: invert(100%);
 }
