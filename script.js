@@ -15,11 +15,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set initial timer display
     updateTimeDisplay(duration);
 
+    // Initial silent autoplay fix for browsers with autoplay policies
+    soundtrack.volume = 0;
+    video.volume = 0;
+
     // Play/Pause functionality
     playButton.addEventListener('click', () => {
         if (isPlaying) {
             pauseMedia();
         } else {
+            // First user interaction, now we can set volume to 1
+            soundtrack.volume = 1;
+            video.volume = 1;
             playMedia();
         }
     });
@@ -62,10 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
             video.src = button.dataset.video;
             soundtrack.src = button.dataset.sound;
             if (isPlaying) {
-                // To properly switch sources, we need to load them first
                 video.load();
                 soundtrack.load();
-                // Then, restart playback
                 playMedia();
             }
         });
@@ -93,6 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateTimeDisplay(seconds) {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
-        timeDisplay.textContent = `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+        // The fix is here:
+        const displaySeconds = remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds;
+        timeDisplay.textContent = `${minutes}:${displaySeconds}`;
     }
 });
