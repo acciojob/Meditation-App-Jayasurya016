@@ -1,133 +1,78 @@
-  window.onload = function() {
-            const app = document.getElementById('app');
-            const song = document.querySelector('.song');
-            const video = document.querySelector('.vid-container video');
-            const playButton = document.querySelector('.play-button');
-            const playIcon = document.querySelector('.play');
-            const pauseIcon = document.querySelector('.pause');
-            const timeDisplay = document.querySelector('.time-display');
-            const timeSelectButtons = document.querySelectorAll('.time-select button');
-            const soundPickerButtons = document.querySelectorAll('.sound-picker button');
-            
-            // Note: Replace these with your actual file paths for local development.
-            // These are provided to make the code run and demonstrate functionality.
-            const soundSources = {
-                'beach.mp3': 'http://commondatastorage.googleapis.com/codeskulptor-assets/Epoq-Lepidoptera.ogg',
-                'rain.mp3': 'http://commondatastorage.googleapis.com/codeskulptor-assets/Epoq-Lepidoptera.ogg'
-            };
+const app = document.getElementById("app");
+const video = document.getElementById("video");
+const playBtn = document.querySelector(".play");
+const timeDisplay = document.querySelector(".time-display");
+const timeButtons = document.querySelectorAll("#time-select button");
+const soundButtons = document.querySelectorAll(".sound-picker button");
 
-            const videoSources = {
-                'beach.mp4': 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-                'rain.mp4': 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
-            };
+let fakeDuration = 600; // default 10 minutes
+let currentTime = fakeDuration;
 
-            let duration = 600; // Initial duration in seconds (10 minutes)
-            let timerId = null;
+const audio = new Audio("Sounds/beach.mp3");
 
-            // Function to update the time display
-            function updateTimeDisplay(time) {
-                const minutes = Math.floor(time / 60);
-                const seconds = Math.floor(time % 60);
-                timeDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            }
+// Format time display
+function updateDisplay(time) {
+  let minutes = Math.floor(time / 60);
+  let seconds = Math.floor(time % 60);
+  timeDisplay.textContent = `${minutes}:${seconds}`;
+}
 
-            // Function to play the audio and video
-            function playMedia() {
-                if (song.paused) {
-                    song.play();
-                    video.play();
-                    playIcon.style.display = 'none';
-                    pauseIcon.style.display = 'block';
+// Play/Pause functionality
+playBtn.addEventListener("click", () => {
+  if (audio.paused) {
+    audio.play();
+    video.play();
+    playBtn.textContent = "⏸️";
+    countdown();
+  } else {
+    audio.pause();
+    video.pause();
+    playBtn.textContent = "▶️";
+    clearInterval(timer);
+  }
+});
 
-                    // Start the timer
-                    if (!timerId) {
-                        timerId = setInterval(() => {
-                            duration--;
-                            if (duration >= 0) {
-                                updateTimeDisplay(duration);
-                            } else {
-                                stopMedia();
-                                updateTimeDisplay(duration);
-                                // The original code had a showMessage function that was not defined.
-                                // I will not add this function as it's not a core requirement and
-                                // could introduce unexpected behavior.
-                                duration = parseInt(document.querySelector('.time-select .active').getAttribute('data-time'));
-                                updateTimeDisplay(duration);
-                            }
-                        }, 1000);
-                    }
-                }
-            }
+let timer;
+function countdown() {
+  clearInterval(timer);
+  timer = setInterval(() => {
+    if (currentTime > 0) {
+      currentTime--;
+      updateDisplay(currentTime);
+    } else {
+      audio.pause();
+      video.pause();
+      playBtn.textContent = "▶️";
+      clearInterval(timer);
+      currentTime = fakeDuration;
+      updateDisplay(currentTime);
+    }
+  }, 1000);
+}
 
-            // Function to pause the audio and video
-            function stopMedia() {
-                song.pause();
-                video.pause();
-                playIcon.style.display = 'block';
-                pauseIcon.style.display = 'none';
-                clearInterval(timerId);
-                timerId = null;
-            }
+// Change time
+timeButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    if (btn.id === "smaller-mins") fakeDuration = 120;
+    if (btn.id === "medium-mins") fakeDuration = 300;
+    if (btn.id === "long-mins") fakeDuration = 600;
 
-            // Play/Pause button event listener
-            playButton.addEventListener('click', () => {
-                if (song.paused) {
-                    playMedia();
-                } else {
-                    stopMedia();
-                }
-            });
+    currentTime = fakeDuration;
+    updateDisplay(currentTime);
+  });
+});
 
-            // Time select buttons
-            timeSelectButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    // Remove active class from all buttons
-                    timeSelectButtons.forEach(btn => btn.classList.remove('active'));
-                    // Add active class to the clicked button
-                    button.classList.add('active');
-                    
-                    duration = parseInt(button.getAttribute('data-time'));
-                    updateTimeDisplay(duration);
-                    
-                    // Stop media and reset if already playing
-                    if (!song.paused) {
-                        stopMedia();
-                    }
-                });
-            });
+// Switch sound & video
+soundButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    audio.src = btn.getAttribute("data-sound");
+    video.src = btn.getAttribute("data-video");
+    audio.play();
+    video.play();
+    playBtn.textContent = "⏸️";
+    countdown();
+  });
+});
 
-            // Sound picker buttons
-            soundPickerButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    // Remove active class from all buttons
-                    soundPickerButtons.forEach(btn => btn.classList.remove('active'));
-                    // Add active class to the clicked button
-                    button.classList.add('active');
-
-                    const soundName = button.getAttribute('data-sound');
-                    const videoName = button.getAttribute('data-video');
-
-                    // Set new sources
-                    song.src = soundSources[soundName];
-                    video.src = videoSources[videoName];
-                    
-                    // Stop media and reset if already playing
-                    if (!song.paused) {
-                        stopMedia();
-                    }
-                    // Since a new video is loaded, we need to unmute it
-                    video.muted = false;
-                    
-                    // Reset to initial time
-                    duration = parseInt(document.querySelector('.time-select .active').getAttribute('data-time'));
-                    updateTimeDisplay(duration);
-                });
-            });
-
-            // Set initial sound and video
-            song.src = soundSources['beach.mp3'];
-            video.src = videoSources['beach.mp4'];
-
-            // Initial display
-            updateTimeDisplay(duration);
-        };
+// Initialize
+updateDisplay(currentTime);

@@ -1,112 +1,63 @@
 body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #000;
-        }
-        
-        #app {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #111;
+  height: 100vh;
+  overflow: hidden;
+  color: white;
+}
 
-        .vid-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
+#app {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
 
-        .vid-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+.vid-container video {
+  position: fixed;
+  top: 0; 
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
 
-        .player-container {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.4);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            color: white;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
+.player-container {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  border-radius: 10px;
+  display: inline-block;
+}
 
-        .time-display {
-            font-size: 3rem;
-            font-weight: bold;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-        }
+.time-display {
+  font-size: 2em;
+  margin: 15px 0;
+}
 
-        .time-select,
-        .sound-picker {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
+.play {
+  font-size: 20px;
+  padding: 10px 20px;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
 
-        .time-select button,
-        .sound-picker button {
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
-        }
+#time-select button,
+.sound-picker button {
+  padding: 10px 15px;
+  margin: 5px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #007bff;
+  color: white;
+}
 
-        .time-select button:hover,
-        .sound-picker button:hover {
-            background: rgba(255, 255, 255, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .sound-picker button.active,
-        .time-select button.active {
-            background: rgba(255, 255, 255, 0.6);
-            border-color: rgba(255, 255, 255, 0.8);
-        }
-
-        .play-button {
-            width: 80px;
-            height: 80px;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid white;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: transform 0.2s ease, background 0.3s ease;
-        }
-
-        .play-button:hover {
-            background: rgba(255, 255, 255, 0.4);
-            transform: scale(1.05);
-        }
-
-        .play-button svg {
-            width: 40px;
-            height: 40px;
-            fill: white;
-        }
+#time-select button:hover,
+.sound-picker button:hover,
+.play:hover {
+  background: #0056b3;
+}
