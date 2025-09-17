@@ -1,63 +1,64 @@
+/* Minimal styling so Cypress can find elements and UI looks reasonable */
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #0f1720;
+  color: #fff;
   display: flex;
-  justify-content: center;
   align-items: center;
-  background: #111;
+  justify-content: center;
   height: 100vh;
-  overflow: hidden;
-  color: white;
 }
 
-#app {
-  position: relative;
-  z-index: 2;
+.app {
+  width: 920px;
+  max-width: 95%;
   text-align: center;
+  position: relative;
 }
 
+/* Video should cover background */
 .vid-container video {
   position: fixed;
-  top: 0; 
-  left: 0;
+  top: 0; left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   z-index: -1;
 }
 
+/* Player box */
 .player-container {
-  background: rgba(0, 0, 0, 0.6);
-  padding: 20px;
+  background: rgba(0,0,0,0.55);
+  padding: 18px;
   border-radius: 10px;
   display: inline-block;
+  min-width: 420px;
 }
 
+/* Timer */
 .time-display {
-  font-size: 2em;
-  margin: 15px 0;
+  font-size: 28px;
+  margin: 8px 0 16px;
 }
 
+/* Buttons */
 .play {
-  font-size: 20px;
-  padding: 10px 20px;
-  margin-bottom: 15px;
+  font-size: 18px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
   cursor: pointer;
+  margin-bottom: 12px;
 }
 
-#time-select button,
+.time-select button,
 .sound-picker button {
-  padding: 10px 15px;
-  margin: 5px;
-  border: none;
+  margin: 6px;
+  padding: 8px 12px;
   border-radius: 6px;
+  border: none;
   cursor: pointer;
   background: #007bff;
-  color: white;
-}
-
-#time-select button:hover,
-.sound-picker button:hover,
-.play:hover {
-  background: #0056b3;
+  color: #fff;
 }
